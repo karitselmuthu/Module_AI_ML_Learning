@@ -26,7 +26,9 @@ from torch.utils.data import DataLoader, TensorDataset
 
 from generate_data import LABELS, ROOT
 
-DEFAULT_DATA = ROOT.parent / "Module 1 - Machine Learning Ticket Classifier" / "data" / "tickets.csv"
+MODULE1 = ROOT.parent / "Module 1 - Machine Learning Ticket Classifier"
+LOCAL_TICKETS = MODULE1 / "data" / "tickets.csv"
+DEFAULT_DATA = LOCAL_TICKETS if LOCAL_TICKETS.is_file() else MODULE1 / "sample_data" / "tickets.csv"
 ARTIFACTS = ROOT / "artifacts" / "text_attention"
 SEED = 42
 MAX_LEN = 24

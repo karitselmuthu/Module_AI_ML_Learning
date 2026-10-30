@@ -7,7 +7,7 @@ import csv
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-DEFAULT_OUTPUT = ROOT / "data"
+DEFAULT_OUTPUT = ROOT / "sample_data"
 LABELS = ("account", "billing", "technical")
 TOPICS = {
     "account": ("sign in", "password reset", "profile access", "team invitation", "account settings"),
@@ -22,7 +22,7 @@ def write_csv(path: Path, fields: tuple[str, ...], rows: list[dict], force: bool
         return
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=fields)
+        writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
     print(f"Created {path} ({len(rows)} synthetic rows)")

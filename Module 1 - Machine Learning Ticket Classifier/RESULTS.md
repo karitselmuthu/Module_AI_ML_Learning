@@ -1,6 +1,6 @@
 # Module 1 project result
 
-Run date: 26 October 2026. Dataset: 120 hand-written examples, evenly divided across account, billing, and technical queues. Random seed: 42. Full metrics, parameters, and confusion matrix are in `artifacts/metrics.json`; individual held-out predictions are in `artifacts/test_predictions.csv`. These existing test results have been reviewed during model development and are exploratory, not a fresh final evaluation. The public repository does not include the local ticket CSVs; `generate_demo_data.py` creates different synthetic fixtures, so rerunning with them will not reproduce these numbers.
+Run date: 26 October 2026. Dataset: 120 hand-written examples, evenly divided across account, billing, and technical queues. Random seed: 42. Full metrics, parameters, and confusion matrix are in `artifacts/metrics.json`; individual held-out predictions are in `artifacts/test_predictions.csv`. These existing test results have been reviewed during model development and are exploratory, not a fresh final evaluation. The public repository includes different synthetic CSVs in `sample_data/`, so rerunning with them will not reproduce these numbers.
 
 | Evaluation | Majority baseline macro F1 | TF-IDF + logistic regression macro F1 |
 |---|---:|---:|

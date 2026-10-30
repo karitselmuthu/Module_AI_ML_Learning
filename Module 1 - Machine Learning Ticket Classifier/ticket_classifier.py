@@ -18,8 +18,13 @@ from sklearn.model_selection import GridSearchCV, StratifiedGroupKFold, Stratifi
 from sklearn.pipeline import Pipeline
 
 ROOT = Path(__file__).resolve().parent
-DATA = ROOT / "data" / "tickets.csv"
-PRODUCTION_STYLE_DATA = ROOT / "data" / "production_style_tickets.csv"
+LOCAL_DATA = ROOT / "data"
+SAMPLE_DATA = ROOT / "sample_data"
+DATA_DIR = (LOCAL_DATA if all((LOCAL_DATA / name).is_file() for name in
+                              ("tickets.csv", "production_style_tickets.csv", "real_style_tickets_v2.csv"))
+            else SAMPLE_DATA)
+DATA = DATA_DIR / "tickets.csv"
+PRODUCTION_STYLE_DATA = DATA_DIR / "production_style_tickets.csv"
 ARTIFACTS = ROOT / "artifacts"
 LABELS = ("account", "billing", "technical")
 SEED = 42

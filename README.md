@@ -6,7 +6,7 @@
 - [Module 2: Deep learning ticket attachments](<Module 2 - Deep Learning Ticket Attachments/README.md>)
 - [Module 3: Generative AI visual assets](<Module 3 - Generative AI Visual Assets/README.md>)
 
-The public repository contains source code and synthetic data generators. Local ticket CSVs, generated model weights, and output images are not committed. Follow each module's setup instructions to create demo data and run its exercises.
+The public repository contains source code, [synthetic sample ticket CSVs](<Module 1 - Machine Learning Ticket Classifier/sample_data/>), [synthetic attachment images](<Module 2 - Deep Learning Ticket Attachments/data/generated/>), and data generators. Local ticket CSVs, trained model weights, and diffusion outputs are not committed. Follow each module's setup instructions to run its exercises.
 
 **Duration:** 16 weeks  
 **Suggested workload:** 10–12 hours per week  

@@ -36,7 +36,7 @@ source .venv/bin/activate
 python -m pip install -r requirements.txt
 ```
 
-Generate the Module 2 teaching images first if its `data/generated/manifest.csv` is missing:
+The Module 2 teaching images and `data/generated/manifest.csv` are included in the repository. If you remove them, regenerate them with:
 
 ```bash
 python '../Module 2 - Deep Learning Ticket Attachments/generate_data.py'

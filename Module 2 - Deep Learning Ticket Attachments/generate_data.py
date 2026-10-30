@@ -158,7 +158,7 @@ def generate(output_dir: Path = DEFAULT_OUTPUT, variants: int = 4) -> Path:
                 rows.append((relative_path.as_posix(), label, split, scenario_id))
     manifest = output_dir / "manifest.csv"
     with manifest.open("w", newline="") as stream:
-        writer = csv.writer(stream)
+        writer = csv.writer(stream, lineterminator="\n")
         writer.writerow(("path", "label", "split", "scenario_id"))
         writer.writerows(rows)
     return manifest

@@ -4,9 +4,9 @@
 
 Route incoming support messages to **account**, **billing**, or **technical** queues. The input is the ticket text; the output is one queue label. This is supervised multiclass classification. A human should review low-confidence or ambiguous predictions before routing in a real service.
 
-The original local experiment used 120 hand-written example tickets, 40 per class. They are instructional data, not production tickets or an unbiased performance benchmark. The public repository omits the local ticket CSVs because support-message data and customer-like identifiers should not be published without a separate review. Run `python generate_demo_data.py` to create clearly synthetic replacement CSVs in `data/`; this keeps any existing local CSVs unless `--force` is given. The generated examples may produce different metrics from the results recorded here. Gather real, consented historical tickets and evaluate on a later time period before deployment.
+The public repository includes three **clearly synthetic sample CSVs** in `sample_data/`. The classifier and exploration notebook use these samples when the three corresponding local files are absent from `data/`. Existing local CSVs stay untouched and take precedence when all three are present. The original local experiment used different hand-written and production-style data; its scores in this README and `RESULTS.md` will not match the sample files. Gather real, consented historical tickets and evaluate on a later time period before deployment.
 
-The local `data/production_style_tickets.csv` contains 600 longer, labeled, production-style examples with subjects, bodies, timestamps, customer IDs, and scenario IDs. The public demo generator creates a simpler synthetic file with the fields needed by the training pipeline. The file is handled as a separate experiment; it does not replace the original model or its reported test results.
+The local `data/production_style_tickets.csv` contains 600 longer, labeled, production-style examples with subjects, bodies, timestamps, customer IDs, and scenario IDs. The included `sample_data/production_style_tickets.csv` has 600 simpler synthetic rows with the fields needed by the training pipeline. Each file is handled as a separate experiment and will produce its own results.
 
 ## Module 1 flowchart
 
@@ -60,16 +60,15 @@ Python 3.10 or newer is recommended. Run all commands below from this project fo
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-python generate_demo_data.py
 ```
 
-The generator creates `tickets.csv` (120 rows), `production_style_tickets.csv` (600 rows), and `real_style_tickets_v2.csv` (603 rows) when they are absent. These are simple teaching fixtures, not copies of the local experiment data. Keep private or consented datasets out of a public Git commit.
+The included samples are ready to use: `sample_data/tickets.csv` (120 rows), `sample_data/production_style_tickets.csv` (600 rows), and `sample_data/real_style_tickets_v2.csv` (603 rows). To regenerate them, run `python generate_demo_data.py --force`. To train on your own CSV, pass its path with `--data`; keep private datasets in the ignored `data/` folder. The sample CSVs are teaching fixtures, not production tickets.
 
 Open `01_explore.ipynb` in Jupyter for cleaning checks, class balance, text-length plots, and example records.
 
 ## Model 1: original example tickets
 
-`data/tickets.csv` has 120 short, labeled examples in `text,label` columns. Train from scratch and run a manual prediction:
+The default ticket CSV has 120 short, labeled examples in `text,label` columns. In a fresh clone it is `sample_data/tickets.csv`; if all three local CSVs exist, it is `data/tickets.csv`. Train from scratch and run a manual prediction:
 
 ```bash
 python ticket_classifier.py train --overwrite
@@ -85,25 +84,25 @@ The `train` command evaluates a majority-class baseline and the classifier on a 
 | `artifacts/metrics.json` | Cross-validation, validation, baseline, and held-out test metrics |
 | `artifacts/test_predictions.csv` | Held-out ticket text, true label, prediction, and correctness |
 
-The split is stratified at the ticket level: 72 train, 24 validation, and 24 test examples. The original model's recorded test macro F1 is **0.7111**, versus **0.1667** for its majority-class baseline. To inspect a known test failure, run:
+The split is stratified at the ticket level: 72 train, 24 validation, and 24 test examples. The original local model's recorded test macro F1 is **0.7111**, versus **0.1667** for its majority-class baseline. To try an ambiguous billing-address message, run:
 
 ```bash
 python ticket_classifier.py predict "How do I update the billing address"
 ```
 
-That message's true label is billing, but the saved original model predicts account. Manual `predict` calls illustrate behavior; only the held-out predictions and labels in `metrics.json` and `test_predictions.csv` produce scored test results.
+The original local model predicted account for that billing request. The sample-trained model may behave differently. Manual `predict` calls illustrate behavior; only the held-out predictions and labels in `metrics.json` and `test_predictions.csv` produce scored test results.
 
 ## Model 2: production-style tickets
 
-`data/production_style_tickets.csv` has 600 labeled rows with `subject,body,label` and other fields. Train a **separate model** from this file:
+`sample_data/production_style_tickets.csv` has 600 labeled rows with `subject,body,label` and other fields. Train a **separate model** from this file:
 
 ```bash
-python ticket_classifier.py train --data data/production_style_tickets.csv --overwrite
+python ticket_classifier.py train --data sample_data/production_style_tickets.csv --overwrite
 python ticket_classifier.py predict $'Invoice question\n\nThe tax amount on our annual subscription invoice looks wrong.' \
   --model artifacts/production_style_tickets/model.joblib
 ```
 
-The loader combines `subject` and `body` as text. At prediction time, pass the same kind of combined text as the quoted argument; `predict` does not read a CSV row. It excludes `scenario_id`, `customer_id`, timestamps, labels, and other metadata from features. Seven exact duplicate combined texts are removed, leaving 593 examples. Scenario IDs stay together across train, validation, test, and cross-validation folds because several tickets are variations of the same scenario.
+The loader combines `subject` and `body` as text. At prediction time, pass the same kind of combined text as the quoted argument; `predict` does not read a CSV row. It excludes `scenario_id`, `customer_id`, timestamps, labels, and other metadata from features. The local dataset had seven exact duplicate combined texts, leaving 593 examples; the included sample file has 600 unique texts. Scenario IDs stay together across train, validation, test, and cross-validation folds because several tickets are variations of the same scenario.
 
 | File | Purpose |
 |---|---|
@@ -112,25 +111,25 @@ The loader combines `subject` and `body` as text. At prediction time, pass the s
 | `artifacts/production_style_tickets/metrics.json` | Cross-validation, validation, baseline, and held-out test metrics |
 | `artifacts/production_style_tickets/test_predictions.csv` | Held-out ticket ID, true label, prediction, and correctness; bodies are not copied |
 
-The scenario-grouped split has 355 train, 119 validation, and 119 test examples. The production-style model's recorded held-out macro F1 is **0.6173**, versus **0.2159** for its majority-class baseline. The original model scored **0.6772** on those same 119 tickets; details are in `RESULTS.md`. The original model remains the default CLI artifact for continuity. These test scores were inspected during development and should not be used as an untouched final comparison.
+The local dataset's scenario-grouped split had 355 train, 119 validation, and 119 test examples. Its recorded held-out macro F1 was **0.6173**, versus **0.2159** for its majority-class baseline. The original local model scored **0.6772** on those same 119 tickets; details are in `RESULTS.md`. These test scores were inspected during development and should not be used as an untouched final comparison. Run the sample file to see its own split and scores.
 
 ## Real-style v2: issue label or routed queue
 
-The local `data/real_style_tickets_v2.csv` has two different targets: `label` describes the issue, while `agent_routed_queue` records a routing queue. The default training target is `label`. In one local example, the issue label is **billing** while the routed queue is **technical**. Decide which question the model should answer before training. The two targets disagree on 359 of 1,500 local source rows. The generated demo file has different rows and counts.
+`sample_data/real_style_tickets_v2.csv` has two different targets: `label` describes the issue, while `agent_routed_queue` records a routing queue. The default training target is `label`. Its 603 synthetic rows include an unsupported issue label and two identical texts with conflicting routed queues so you can practice the audit and exclusion flow. The local experiment had 1,500 different rows; its counts and scores below are reference results, not expected sample results.
 
 ```bash
 # Audit each target before excluding any rows.
-python ticket_classifier.py audit --data data/real_style_tickets_v2.csv
-python ticket_classifier.py audit --data data/real_style_tickets_v2.csv --target agent_routed_queue
+python ticket_classifier.py audit --data sample_data/real_style_tickets_v2.csv
+python ticket_classifier.py audit --data sample_data/real_style_tickets_v2.csv --target agent_routed_queue
 
-# Predict the issue category. Explicitly exclude 194 rows labeled "other".
-python ticket_classifier.py train --data data/real_style_tickets_v2.csv \
+# Predict the issue category. Explicitly exclude the one sample row labeled "other".
+python ticket_classifier.py train --data sample_data/real_style_tickets_v2.csv \
   --drop-unsupported --output artifacts/real_style_tickets_v2_reviewed --overwrite
 python ticket_classifier.py predict 'I received a failed-payment message, but my bank shows a charge' \
   --model artifacts/real_style_tickets_v2_reviewed/model.joblib
 
-# Predict the recorded route. Explicitly exclude all 36 rows in 15 conflicting-text groups.
-python ticket_classifier.py train --data data/real_style_tickets_v2.csv \
+# Predict the recorded route. Explicitly exclude the two conflicting sample rows.
+python ticket_classifier.py train --data sample_data/real_style_tickets_v2.csv \
   --target agent_routed_queue --drop-conflicts \
   --output artifacts/real_style_tickets_v2_queue_reviewed --overwrite
 python ticket_classifier.py predict 'I received a failed-payment message, but my bank shows a charge' \
