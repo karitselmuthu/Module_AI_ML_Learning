@@ -1,0 +1,8 @@
+Pillow>=10,<13
+pypdf>=5,<7
+rapidocr>=3.10,<4
+onnxruntime>=1.20,<2
+faster-whisper>=1.1,<2
+av>=11,<19  # faster-whisper 1.2.1 passes metadata_errors to av.open
+pyttsx3>=2.98,<3
+pytest>=8,<10
