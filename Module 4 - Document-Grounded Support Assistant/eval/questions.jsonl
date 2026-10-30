@@ -1,0 +1,9 @@
+{"question":"How do I reset my password?","source":"account_access.md","expected_phrase":"Forgot password"}
+{"question":"Where can I change the billing address?","source":"billing_policy.md","expected_phrase":"Billing > Profile"}
+{"question":"How long do approved refunds take?","source":"billing_policy.md","expected_phrase":"five business days"}
+{"question":"What is the maximum file upload size?","source":"technical_help.md","expected_phrase":"10 MB"}
+{"question":"What should I do after an HTTP 413 error?","source":"technical_help.md","expected_phrase":"reduce the file size"}
+{"question":"When is live chat available?","source":"support_hours.md","expected_phrase":"Monday through Friday"}
+{"question":"Where do I replace an authenticator phone?","source":"account_access.md","expected_phrase":"Account > Security"}
+{"question":"What is the CEO's salary?","source":null,"expected_phrase":null}
+{"question":"When will the next solar eclipse occur?","source":null,"expected_phrase":null}

@@ -1,0 +1,18 @@
+{"split":"train","text":"I cannot sign in after resetting my password","label":"account"}
+{"split":"train","text":"The login code never arrived","label":"account"}
+{"split":"train","text":"Please change my profile email","label":"account"}
+{"split":"train","text":"My authenticator phone was replaced","label":"account"}
+{"split":"train","text":"The invoice total is incorrect","label":"billing"}
+{"split":"train","text":"Please send a receipt for my payment","label":"billing"}
+{"split":"train","text":"I need a refund for the extra charge","label":"billing"}
+{"split":"train","text":"How can I update the tax number on my bill","label":"billing"}
+{"split":"train","text":"The API keeps returning an error","label":"technical"}
+{"split":"train","text":"My file upload fails with status 413","label":"technical"}
+{"split":"train","text":"The app crashes when I open reports","label":"technical"}
+{"split":"train","text":"Our integration has stopped syncing","label":"technical"}
+{"split":"validation","text":"I am locked out of my account","label":"account"}
+{"split":"validation","text":"My two factor code is invalid","label":"account"}
+{"split":"validation","text":"Why was my card charged twice","label":"billing"}
+{"split":"validation","text":"I need the latest subscription invoice","label":"billing"}
+{"split":"validation","text":"The dashboard stays blank after login","label":"technical"}
+{"split":"validation","text":"Exports time out every morning","label":"technical"}
