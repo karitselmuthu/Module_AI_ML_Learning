@@ -1,0 +1,10 @@
+# Local environments and generated files
+.DS_Store
+.pytest_cache/
+**/.pytest_cache/
+**/.venv/
+**/__pycache__/
+**/.ipynb_checkpoints/
+**/artifacts/
+**/data/generated/
+Module 1 - Machine Learning Ticket Classifier/data/*.csv

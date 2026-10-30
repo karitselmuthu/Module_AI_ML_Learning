@@ -1,0 +1,15 @@
+{
+  "model_id": "segmind/tiny-sd",
+  "prompts": [
+    "Flat illustration of a generic support inbox, blue and white palette, no text, no logos",
+    "Flat illustration of an abstract invoice and coins, blue and white palette, no text, no logos"
+  ],
+  "negative_prompt": "watermark, brand name, readable text",
+  "seed": 42,
+  "width": 256,
+  "height": 256,
+  "settings": [
+    {"steps": 10, "guidance_scale": 4.0},
+    {"steps": 20, "guidance_scale": 7.0}
+  ]
+}
